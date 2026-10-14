@@ -1,4 +1,4 @@
-# Cron Jobs – Important Commands (RHCSA Notes)
+# Cron Jobs 
 
 Cron is used to schedule and automatically execute tasks at specified times in Linux.
 
@@ -13,7 +13,6 @@ Cron is used to schedule and automatically execute tasks at specified times in L
 | `crontab -u amox -e` | Edit amox's cron jobs (as root) |
 | `crontab -u amox -l` | List amox's cron jobs (as root) |
 | `crontab -u amox -r` | Remove amox's cron jobs (as root) |
-| `crontab -` | Install cron jobs from standard input |
 
 For safer deletion, use:
 
@@ -101,23 +100,29 @@ Step 4 — Check output after the job runs:
 cat /tmp/date.txt
 ```
 
-Important: `>>` appends output to the file, while `>` overwrites it.
-
 ## 6. Cron shortcuts
 
-| Shortcut | Meaning |
-| --- | --- |
-| `@reboot` | At system startup |
-| `@hourly` | Every hour |
-| `@daily` | Every day |
-| `@weekly` | Every week |
-| `@monthly` | Every month |
-| `@yearly` | Every year |
-
-Example:
+## 
 
 ```
+# Run at cron daemon startup
+@reboot /usr/bin/date >> /tmp/reboot.txt
+
+# Run every hour
+@hourly /usr/bin/date >> /tmp/hourly.txt
+
+# Run every day
 @daily /usr/bin/date >> /tmp/daily.txt
+
+# Run every week
+@weekly /usr/bin/date >> /tmp/weekly.txt
+
+# Run every month
+@monthly /usr/bin/date >> /tmp/monthly.txt
+
+# Run every year
+@yearly /usr/bin/date >> /tmp/yearly.txt
 ```
+
 
 RHCSA exam tip: Focus especially on `crontab -e`, `crontab -l`, `crontab -r`, `crontab -u`, cron time syntax, and `systemctl status crond`. These are the most useful commands for practical cron configuration.
