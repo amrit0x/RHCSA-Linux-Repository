@@ -1,4 +1,4 @@
-![NFS](/Lecture-Snapshots/15.NFS.jpg)
+![NFS](/Lecture-Snapshots/15.NFS.JPG)
 
 # NFS (Network File System) — RHCSA Notes
 
