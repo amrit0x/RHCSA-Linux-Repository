@@ -53,6 +53,8 @@ Important repository commands:
 | `flatpak remote-ls --app flathub` | List available applications only |
 | `flatpak remote-delete flathub` | Remove repository configuration |
 
+flatpak remote-ls flathub | grep -i gimp  -> For searching a specific Flatpak application (alternative of "flatpak seach gimp" command)
+
 ### **Local repository (RHCSA practice)**
 
 If the exam provides an existing Flatpak repository at `/srv/flatpak-repo`:
