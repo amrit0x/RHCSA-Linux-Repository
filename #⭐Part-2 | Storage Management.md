@@ -249,19 +249,6 @@ After creating the partition, change its type to Swap.
 
 Inside `fdisk`:
 
-```text
-t
-```
-
-Then specify the Swap type.
-
-The session uses:
-
-```text
-82
-```
-
-After that, verify the partition table:
 
 ```text
 p
