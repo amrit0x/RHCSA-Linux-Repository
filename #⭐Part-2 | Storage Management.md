@@ -260,6 +260,10 @@ The session uses:
 ```text
 82
 ```
+```
+82 → Linux Swap (MBR)
+83 → Linux filesystem (MBR)
+```
 
 After that, verify the partition table:
 
