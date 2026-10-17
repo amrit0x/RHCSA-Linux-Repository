@@ -243,7 +243,7 @@ For example, to create a 1 GB partition:
 
 ---
 
-## Change the Partition Type
+## Change the Partition Type (and even you can skip this t and 82 )
 
 After creating the partition, change its type to Swap.
 
