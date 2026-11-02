@@ -1,0 +1,8 @@
+Important chage commands
+Command	Purpose
+chage -l <user>	-> List password aging information
+chage -M 90 <user> ->	Set maximum password age to 90 days
+chage -m 7 <user>	-> Set minimum password age to 7 days
+chage -W 7 <user>	-> Warn 7 days before expiration
+chage -I 30 <user> ->	Disable account 30 days after password expires
+chage -d 0 <user> ->	Force password change at next login  (-d = Set the date of the last password change)
