@@ -1,1 +1,1 @@
-getent group <grp_1> <grp_2> <grp_3> <grp_4>.........  => getent command used to list all users inside groups
+getent group <devops> <grp_2> <grp_3> <grp_4>.........  => used to check whether a group named devops and others exists and display its group information
