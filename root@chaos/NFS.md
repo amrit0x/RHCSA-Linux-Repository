@@ -16,13 +16,13 @@ NFS (Network File System) is a network protocol that allows a Linux server to sh
 
 **Important :  we make mount point in NFC client/(our system) of an particular directory of NFS server**
 
-Example: A server shares `/mnt`, and a client accesses its files through `/tmp/mount` without copying the data locally.
+Example: A server shares `/srv/nfs/shared`, and a client accesses its files through `/mnt/nfs/shared` without copying the data locally.
 
 !download.svg
 
                                        Server directory      →     Network       →       Client mount point
 
-→ now if do any changes like creating files or whatever in */tmp/mount* it will automatically reflect in NFS server
+→ now if do any changes like creating files or whatever in */mnt/nfs/shared* it will automatically reflect in NFS server
 
 ## **2. Configure NFS Server (if NFS server is also rhel)**
 
@@ -54,17 +54,17 @@ Allows NFS traffic through the firewall.
 Step 4 — Configure shared directory
 
 ```bash
-mkdir -p /mnt
+mkdir -p /srv/nfs/shared
 vim /etc/exports
 ```
 
 Add:
 
 ```bash
-/mnt 10.219.122.0/24/(or your client IP)(rw,sync,root_squash,no_subtree_check)
+/srv/nfs/shared 10.219.122.0/24/(or your client IP)(rw,sync,root_squash,no_subtree_check)
 ```
 
-This shares `/mnt` with clients in the specified subnet.
+This shares `/srv/nfs/shared` with clients in the specified subnet.
 
 | Option | Meaning |
 | --- | --- |
@@ -76,7 +76,7 @@ This shares `/mnt` with clients in the specified subnet.
 | `no_subtree_check` | Disables subtree checking |
 | `*` | Allow any client — avoid on untrusted networks |
 
-Important: `/etc/exports` controls NFS sharing, not ordinary Linux filesystem permissions. For a writable share, configure suitable ownership and permissions as well. Avoid `chmod 777 /mnt` except in an isolated throwaway lab.
+Important: `/etc/exports` controls NFS sharing, not ordinary Linux filesystem permissions. For a writable share, configure suitable ownership and permissions as well. Avoid `chmod 777 /srv/nfs/shared` except in an isolated throwaway lab.
 
 Step 5 — Apply exports
 
@@ -112,13 +112,13 @@ dnf install -y nfs-utils
 Step 2 — Create mount point
 
 ```bash
-mkdir -p /tmp/mount
+mkdir -p /mnt/nfs/shared
 ```
 
 Step 3 — Mount NFS share
 
 ```bash
-mount -t nfs 10.219.122.167:/mnt /tmp/mount
+mount -t nfs 10.219.122.167:/srv/nfs/shared /mnt/nfs/shared
 ```
 
 Explanation:
@@ -128,21 +128,21 @@ Explanation:
 | `mount` | Attach a filesystem |
 | `-t nfs` | Filesystem type |
 | `10.219.122.167` | NFS server IP |
-| `:/mnt` | Shared server directory |
-| `/tmp/mount` | Local client mount point |
+| `:/srv/nfs/shared` | Shared server directory |
+| `/mnt/nfs/shared` | Local client mount point |
 
 Step 4 — Verify
 
 ```bash
-df -hT /tmp/mount  # Verify NFS filesystem and mount details.
-mountpoint /tmp/mount # Verify the directory is a mount point.
-ls /tmp/mount
+df -hT /mnt/nfs/shared  # Verify NFS filesystem and mount details.
+mountpoint /mnt/nfs/shared # Verify the directory is a mount point.
+ls /mnt/nfs/shared
 ```
 
 Step 5 — Unmount
 
 ```bash
-umount /tmp/mount
+umount /mnt/nfs/shared
 ```
 
 ## 4. Permanent NFS Mount Using /etc/fstab
@@ -156,14 +156,14 @@ vim /etc/fstab
 Add:
 
 ```
-10.219.122.167:/mnt /tmp/mount nfs defaults,_netdev 0 0
+10.219.122.167:/srv/nfs/shared /mnt/nfs/shared nfs defaults,_netdev 0 0
 ```
 
 Then:
 
 ```bash
 mount -a # Mount all configured filesystems
-findmnt /tmp/mount # Verify the mount
+findmnt /mnt/nfs/shared # Verify the mount
 ```
 
 `_netdev` identifies the mount as network-dependent, allowing systemd to handle it appropriately during startup.
@@ -174,7 +174,7 @@ AutoFS automatically mounts NFS shares when accessed and can unmount them after 
 
 Unlike a regular `/etc/fstab` NFS mount, AutoFS does not need to keep the remote share continuously mounted.
 
-**Configure AutoFS on Client :** Make sure `/tmp/mount` is not already manually mounted.
+**Configure AutoFS on Client :** Make sure `/mnt/nfs/shared` is not already manually mounted.
 
 Step 1 — Install AutoFS
 
@@ -206,15 +206,15 @@ vim /etc/auto.nfs
 Add: 
 
 ```
-/tmp/mount -fstype=nfs,rw 10.219.122.167:/mnt
+/mnt/nfs/shared -fstype=nfs,rw 10.219.122.167:/srv/nfs/shared
 ```
 
 | Part | Meaning |
 | --- | --- |
-| `/tmp/mount` | Local mount point |
+| `/mnt/nfs/shared` | Local mount point |
 | `-fstype=nfs` | NFS filesystem |
 | `rw` | Request read/write access |
-| `10.219.122.167:/mnt` | NFS server and exported directory |
+| `10.219.122.167:/srv/nfs/shared` | NFS server and exported directory |
 
 Step 4 — Start AutoFS
 
@@ -226,11 +226,11 @@ systemctl restart autofs
 Step 5 — Test automounting
 
 ```
-ls /tmp/mount
+ls /mnt/nfs/shared
 findmnt -t nfs,nfs4
 ```
 
-Accessing `/tmp/mount` triggers the NFS mount.
+Accessing `/mnt/nfs/shared` triggers the NFS mount.
 
 Note: Your teacher used `/etc/auto.misc`, which can work, but a separate `/etc/auto.nfs` is cleaner. Files inside `/etc/auto.master.d/` must have the `.autofs` extension to be included automatically.
 
@@ -255,11 +255,11 @@ Practice checklist
 
 0/6
 
-- [ ]  Configure an NFS server to export /mnt.
+- [ ]  Configure an NFS server to export /srv/nfs/shared.
 - [ ]  Allow only the 10.219.122.0/24 subnet.
-- [ ]  Mount the share manually on a client at /tmp/mount.
+- [ ]  Mount the share manually on a client at /mnt/nfs/shared.
 - [ ]  Unmount it and configure AutoFS direct mapping.
-- [ ]  Verify that accessing /tmp/mount triggers the NFS mount.
+- [ ]  Verify that accessing /mnt/nfs/shared triggers the NFS mount.
 - [ ]  Ensure AutoFS starts automatically after reboot.
 
 Final memory trick:
