@@ -262,7 +262,7 @@ Practice checklist
 - [ ]  Verify that accessing /mnt/nfs/shared triggers the NFS mount.
 - [ ]  Ensure AutoFS starts automatically after reboot.
 
-Answer(1/6): (Q: Configure an NFS server to export /srv/nfs/shared.)
+Q.1-Answer: (Q: Configure an NFS server to export /srv/nfs/shared.)
 
 Step 1 — Install NFS utilities:
 ```dnf install -y nfs-utils```
@@ -306,6 +306,36 @@ Step 7 — Verify the exports:
 ```exportfs -v```
 
 You should see /srv/nfs/shared in the output.
+
+Q.3-Answer:)
+`mount -t nfs <IP_OF_NFS_SERVER>:/srv/nfs/shared /mnt/nfs/shared`
+
+Q.5-Answer:)
+Step 1 — Check before accessing
+
+`findmnt /mnt/nfs/shared`
+
+Initially, you should see no output because the NFS share has not yet been mounted.
+
+
+Step 2 — Access the directory
+
+`ls -la /mnt/nfs/shared`
+
+This access triggers AutoFS, which automatically mounts the NFS share.
+
+
+Step 3 — Verify the mount
+
+`findmnt /mnt/nfs/shared`
+
+
+Step 4 — Verify filesystem type
+
+`findmnt -t nfs,nfs4`
+
+This displays mounted NFS filesystems.
+
 
 Final memory trick:
 
