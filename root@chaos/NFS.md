@@ -262,6 +262,42 @@ Practice checklist
 - [ ]  Verify that accessing /mnt/nfs/shared triggers the NFS mount.
 - [ ]  Ensure AutoFS starts automatically after reboot.
 
+Answer(1/6): Step 1 — Install NFS utilities
+```dnf install -y nfs-utils```
+
+Step 2 — Create the shared directory
+```mkdir -p /srv/nfs/shared```
+
+Step 3 — Configure NFS exports
+```vim /etc/exports``` 
+Add this entry:
+```/srv/nfs/shared <CLIENT_IP>(rw,sync,root_squash,no_subtree_check)```
+
+Replace <CLIENT_IP> with your actual NFS Client VM IP.
+Understanding the options:
+|Option |	Purpose |
+|rw	    | Allows read and write access. |
+|sync   |	Writes changes to stable storage before replying. |
+|root_squash |	Maps remote root users to an anonymous user. |
+|no_subtree_check	| Disables subtree checking. |
+
+Important: Use rw for read/write access or ro for read-only access. Avoid * unless you intentionally want to allow connections from any client.
+
+Step 4 — Apply the export configuration
+```exportfs -rav```
+This reloads the export configuration and makes the configured shares available.
+
+Step 5 — Enable and start NFS server
+```systemctl enable --now nfs-server```
+
+Step 6 — Allow NFS through the firewall
+```firewall-cmd --permanent --add-service=nfs```
+```firewall-cmd --reload```
+
+Step 7 — Verify the exports
+```exportfs -v```
+You should see /srv/nfs/shared in the output.
+
 Final memory trick:
 
 `NFS Server → /etc/exports → exportfs → NFS Client → mount → AutoFS`
