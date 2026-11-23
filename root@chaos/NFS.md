@@ -61,7 +61,7 @@ vim /etc/exports
 Add:
 
 ```bash
-/mnt 10.219.122.0/24/(or your client IP)(rw,sync,root_squash)
+/mnt 10.219.122.0/24/(or your client IP)(rw,sync,root_squash,no_subtree_check)
 ```
 
 This shares `/mnt` with clients in the specified subnet.
