@@ -262,7 +262,8 @@ Practice checklist
 - [ ]  Verify that accessing /mnt/nfs/shared triggers the NFS mount.
 - [ ]  Ensure AutoFS starts automatically after reboot.
 
-Answer(1/6): Step 1 — Install NFS utilities
+Answer(1/6): (Q: Configure an NFS server to export /srv/nfs/shared.)
+Step 1 — Install NFS utilities
 ```dnf install -y nfs-utils```
 
 Step 2 — Create the shared directory
