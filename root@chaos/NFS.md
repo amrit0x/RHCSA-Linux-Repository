@@ -73,6 +73,7 @@ This shares `/mnt` with clients in the specified subnet.
 | `sync` | Commit writes to stable storage before replying |
 | `root_squash` | Map remote root to an unprivileged identity |
 | `no_root_squash` | Disable root squashing — security risk |
+| `no_subtree_check` | Disables subtree checking |
 | `*` | Allow any client — avoid on untrusted networks |
 
 Important: `/etc/exports` controls NFS sharing, not ordinary Linux filesystem permissions. For a writable share, configure suitable ownership and permissions as well. Avoid `chmod 777 /mnt` except in an isolated throwaway lab.
